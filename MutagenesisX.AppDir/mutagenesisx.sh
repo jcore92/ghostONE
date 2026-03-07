@@ -14,7 +14,7 @@ mutagenesisx-shell () {
     app_ver_major="1"
     app_ver_minor="0"
     app_ver_build="0"
-    app_ver_stage="alpha"
+    app_ver_stage="beta"
     probe_name="xProbe"
 
     gui_flag="0"
@@ -253,48 +253,6 @@ mutagenesisx-shell () {
         "⠐⠁⠁⠀⠀⠀⠀⠀⠀⠁⠈⠀⠉⠋⠐⠹⠛⠋⠉⠉⠉⠉⠉⠉⠉⠛⠻⠿"
         "⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀"
         "⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶"
-        ""
-        )
-
-        # Get the terminal width
-        term_width=$(tput cols)
-
-        # Function to center a line
-        center_line() {
-            local line="$1"
-            local line_length=${#line}
-            local padding=$(( (term_width - line_length) / 2 ))
-            printf "%${padding}s%s%${padding}s\n" "" "$line" ""
-        }
-
-        # Center each line of the image
-        for line in "${logotitle[@]}"; do
-            center_line "$line"
-        done
-
-        sleep .2
-
-    }
-
-    mutagen_banner() {
-        # The multi-line image
-        logotitle=(
-        ""
-        "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠛⢿⣿⣿⣿⣿⣿"
-        "⣿⣿⣿⣿⣿⠛⣉⣉⠻⣿⣿⣿⣿⣿⣿⣿⠛⡛⢿⣧⠘⠃⢼⡿⠛⠛⢿⣿"
-        "⣿⣿⣿⣿⣇⠸⣧⣼⠇⣸⣿⣿⣿⣿⣿⣷⣄⠑⢄⡀⢲⡶⢤⡀⠊⣠⣾⣿"
-        "⣿⣿⢋⣼⣿⣷⣤⣤⣾⣿⣿⣿⣿⣿⠋⣉⣻⢀⣈⡿⢿⣷⣾⣉⣀⠛⣉⠙"
-        "⣿⡇⠘⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⣉⣤⠈⢉⣷⣾⡟⢻⡉⠁⣤⣉⣤"
-        "⣯⣄⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⡠⠊⡁⠸⠿⢟⠀⢄⡙⢿⣿"
-        "⣿⣿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣤⣤⣾⡟⢠⡄⢹⣿⣤⣤⣾⣿"
-        "⣿⡟⠻⠟⠀⢻⡿⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣤⣾⣿⣿⠛⠛⢻"
-        "⣿⠟⢀⣸⣟⢻⣆⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣠⠈⣿"
-        "⣶⣄⠘⢲⣟⣻⡆⢀⣶⣾⣿⣿⣿⠋⣭⠙⣿⣿⠿⠿⡿⠋⣍⠙⣿⡟⢠⣿"
-        "⣿⣋⣠⣌⠉⣁⣤⣈⣿⣿⣿⣿⣿⣦⡄⠑⣌⣹⣷⣶⣄⠈⢠⣴⣿⣿⣿⣿"
-        "⣿⣿⣿⣿⣤⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢠⣬⣿⣿⣶⣿⡇⢸⣿⣿⣿⣿⣿"
-        "⣿⣿⣿⣿⣿⣿⣿⣧⡘⠿⠏⠉⢻⣿⡇⠸⣽⣿⣯⠿⣏⠁⢸⣿⣿⣿⣿⣿"
-        "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣀⣼⠋⣤⠀⣈⣉⠛⣀⣀⠑⣬⠙⣿⣿⣿⣿"
-        "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣤⣴⣿⣿⣿⣿⣿⣦⣤⣼⣿⣿⣿⣿"
         ""
         )
 
@@ -615,6 +573,7 @@ Attempting to install package(s):
 '${missing[*]}'
 " | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info --timeout=3 --width=800 --height=600 --title="$app_name: $probe_name Notification" --ok-label="" --cancel-label=""
+                x-terminal-emulator -e bash -c "printf \" 🔐 \" ; sudo apt update ; sudo $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\";" # exec bash
                 exit
             else
                 cat
@@ -848,6 +807,19 @@ $full_path" | center
                 divider
                 echo ""
             fi
+
+            export -f center
+            export -f print_red
+            export -f divider
+            export -f cursor_menu
+            export -f entertocontinue
+            export -f text_delay
+
+            export pkgmngr_install
+            export app_name
+            export app_temp_loc
+            export gui_flag
+            export tui_flag
 
             #clear
             #mutagen_banner
