@@ -444,16 +444,24 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
                 exit
             fi
 
-        #else
+        fi
 
-            #xprob_messages+=("✓ GPU detected: $(lspci | grep -i vga)")
-            #xprob_messages+=(" ✓ Not using tty.")
 
-            #text_delay ; echo " ✓ Not using tty." | if [ "$tui_flag" = "1" ]; then
-                #cat
-            #fi
+
+        if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$IS_WSL" ]; then
+
+            text_delay ; echo " ✕ WSL is not supported." | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info --width=800 --height=600
+                exit
+            else
+                cat
+                entertocontinue
+                exit
+            fi
 
         fi
+
+
 
         # Get system's pretty name to display
         prettyname="$(cat /etc/os-release | grep "PRETTY_NAME" | awk -F '"' '{print $2}')"
