@@ -343,13 +343,13 @@ mutagenesisx-shell () {
 
 Presented By:
 https://jcorestudios.com/
-https://github.com/JCore-Studios
+https://github.com/jcore92
 
 $app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
 
-Infused with $app_name, GhostAPT, and Command Center's DNA. (Various older predecessor's of $app_name.)
+Infused with MutagenesisX, GhostAPT, and Command Center's DNA. (Various older predecessor's of MutagenesisX.)
 
-jcore92 - Lead Programmer/$app_name Author" | zenity --text-info --title="About $app_name" --width=880 --height=800 #--ok-label="" --cancel-label="" &
+jcore92 - Lead Programmer/MutagenesisX Author" | zenity --text-info --title="About $app_name" --width=880 --height=800 #--ok-label="" --cancel-label="" &
 
     fi
 
