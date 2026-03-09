@@ -395,28 +395,25 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
 
             text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info --width=580 --height=600
-                exit
             else
                 cat
                 entertocontinue
-                exit
             fi
 
+        exit
         fi
-
 
 
         if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$IS_WSL" ]; then
 
             text_delay ; echo " ✕ WSL is not supported." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info --width=580 --height=600
-                exit
             else
                 cat
                 entertocontinue
-                exit
             fi
 
+        exit
         fi
 
 
@@ -520,7 +517,7 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
         tool_to_pkg_name() {
         case "$1" in
         "7z") echo "7zip" ;;
-        "7z")  echo "p7zip-full" ;;
+        #"7z")  echo "p7zip-full" ;;
         "dig")  echo "dnsutils" ;;
         "sha256sum")  echo "coreutils" ;;
         *)     echo "$1" ;;
@@ -531,7 +528,8 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
 
         check_programs() {
         declare -g missing=()
-        local programs=("jq" "unzip" "7z" "dig" "nano" "git" "flatpak" "zenity")  # Add more here
+        #local programs=("jq" "unzip" "7z" "dig" "nano" "git" "flatpak" "zenity")  # Add more here
+        local programs=("jq" "nano" "git" "flatpak" "zenity")  # Add more here
 
         for prog in "${programs[@]}"; do
         if ! command -v "$prog" &>/dev/null; then
