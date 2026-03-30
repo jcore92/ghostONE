@@ -33,27 +33,27 @@ mutagenesisx-shell () {
     done)"
 
     if [ "$package_manager" == "apt" ]; then
-    pkgmngr_install="sudo $package_manager install"
+    pkgmngr_install="sudo $package_manager install -y"
     pkgmngr_refresh="sudo $package_manager update"
     fi
 
     if [ "$package_manager" == "dnf" ]; then
-    pkgmngr_install="sudo $package_manager install"
+    pkgmngr_install="sudo $package_manager install -y"
     pkgmngr_refresh="sudo $package_manager makecache"
     fi
 
     if [ "$package_manager" == "yum" ]; then
-    pkgmngr_install="sudo $package_manager install"
+    pkgmngr_install="sudo $package_manager install -y"
     pkgmngr_refresh="sudo $package_manager check-update"
     fi
 
     if [ "$package_manager" == "pacman" ]; then
     pkgmngr_install="sudo pacman -Syu --noconfirm"
-    pkgmngr_refresh="sleep 1"
+    pkgmngr_refresh="sleep .1"
     fi
 
     if [ "$package_manager" == "zypper" ]; then
-    pkgmngr_install="sudo $package_manager install"
+    pkgmngr_install="sudo $package_manager install -y"
     pkgmngr_refresh="sudo $package_manager refresh"
     fi
 
@@ -473,11 +473,11 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
         # Check the /etc/os-release file for any trace of Ubuntu or Debian: ubuntu debian
         if grep -qi "ubuntu" /etc/os-release; then
 
-            xprob_messages+=(" ✓ $prettyname (Ubuntu-based)")
+            xprob_messages+=(" ✓ $prettyname")
             xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
             xprob_messages+=(" ✓ Display Server: $XDG_SESSION_TYPE")
 
-            text_delay ; echo " ✓ $prettyname (Ubuntu-based)" | if [ "$tui_flag" = "1" ]; then
+            text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
@@ -491,11 +491,11 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
 
         elif grep -qi "debian" /etc/os-release; then
 
-            xprob_messages+=(" ✓ $prettyname (Debian-based)")
+            xprob_messages+=(" ✓ $prettyname")
             xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
             xprob_messages+=(" ✓ Display Server: $XDG_SESSION_TYPE")
 
-            text_delay ; echo " ✓ $prettyname (Debian-based)" | if [ "$tui_flag" = "1" ]; then
+            text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
