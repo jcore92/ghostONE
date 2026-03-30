@@ -348,9 +348,9 @@ Presented By:
 https://jcorestudios.com/
 https://github.com/jcore92
 
-Infused with MutagenesisX, GhostAPT, and Command Center's DNA. (Various older predecessor's of MutagenesisX.)
+Infused with MutagenesisX, ghostAPT v2, and Command Center's DNA. (Various older predecessor's of MutagenesisX.)
 
-jcore92 - Lead Programmer/MutagenesisX Author" | zenity --text-info --title="About $app_name" $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label="" &
+jcore92 - Lead Programmer" | zenity --text-info --title="About $app_name" $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label="" &
 
     fi
 
@@ -375,10 +375,10 @@ https://github.com/jcore92" | center
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
 " | center
 
-    echo "Infused with MutagenesisX, GhostAPT, and Command Center's DNA.
+    echo "Infused with MutagenesisX, ghostAPT v2, and Command Center's DNA.
 (Various older predecessor's of MutagenesisX.)
 
-jcore92 - Lead Programmer/MutagenesisX Author" | center
+jcore92 - Lead Programmer" | center
 
     sleep 3
 
@@ -530,7 +530,7 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
 
         #text_delay ; echo "Checking package manager..."
 
-        if [ "$package_manager" != "apt" ]; then
+        if [ "$package_manager" != "apt" ] && [ "$package_manager" != "zypper" ] && [ "$package_manager" != "dnf" ] && [ "$package_manager" != "pacman" ] && [ "$package_manager" != "yum" ]; then
 
             if [ "$gui_flag" = "1" ]; then
             echo "# generating results..." >&3
@@ -538,7 +538,7 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ Unsupported package manager '$package_manager'. APT is currently only supported." | if [ "$gui_flag" = "1" ]; then
+            text_delay ; echo " ✕ Unsupported package manager '$package_manager'." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
                 exit
             else
@@ -554,9 +554,9 @@ jcore92 - Lead Programmer/MutagenesisX Author" | center
 
         else
 
-            xprob_messages+=(" ✓ apt is installed")
+            xprob_messages+=(" ✓ $package_manager is installed")
 
-            text_delay ; echo " ✓ apt is installed" | if [ "$tui_flag" = "1" ]; then
+            text_delay ; echo " ✓ $package_manager is installed" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
         fi
@@ -995,7 +995,7 @@ if [ "$gui_flag" = "1" ]; then
     xprobe
     echo "100" >&3
     exec 3>&-  # Close fd
-    printf '%s\n' "${xprob_messages[@]}" | zenity --text-info --title="$app_name: $probe_name Report" --timeout=3 $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label=""
+    printf '%s\n' "${xprob_messages[@]}" | zenity --text-info --title="$app_name: $probe_name Report" --timeout=5 $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label=""
     #exit
 else
     xprobe
@@ -1003,7 +1003,8 @@ fi
 
 if [ "$tui_flag" = "1" ]; then
 
-sleep 1.5
+#sleep 1.5
+sleep 3
 
 fi
 
