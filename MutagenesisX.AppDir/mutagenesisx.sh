@@ -865,7 +865,38 @@ $full_path" | center
             #clear
             #mutagen_banner
             if [ "$gui_flag" = "1" ]; then
-                x-terminal-emulator -e bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\";" # exec bash
+
+                if x-terminal-emulator -e bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\";"; then
+                    sleep .1
+                else
+                    # List of terminal emulators with their -e syntax
+                    terminals=(
+                    "gnome-terminal --"           # GNOME
+                    "konsole --execute"           # KDE
+                    "xfce4-terminal -x"           # XFCE
+                    "lxterminal -e"               # LXDE
+                    "tilix -e"                    # Tilix (VTE-based)
+                    "mate-terminal -x"            # MATE
+                    "kitty --execute"             # Kitty
+                    "alacritty --command"         # Alacritty
+                    "urxvt -e"                    # RXVT
+                    "xterm -e"                    # XTerm
+                    "terminator -e"               # Terminator
+                    "deepin-terminal -e"          # Deepin
+                    "wezterm start --"            # WezTerm
+                    )
+
+                    for term in "${terminals[@]}"; do
+                    cmd=($term)  # Split into command and args
+                    if command -v "${cmd[0]}" &>/dev/null; then
+                        "${cmd[@]}" bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\"" #exec
+                    fi
+                    done
+
+                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
+                    #exit 1
+                fi
+
             else
                 sleep .5
                 "$full_path"
