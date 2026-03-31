@@ -525,7 +525,7 @@ jcore92 - Lead Programmer" | center
             divider
             entertocontinue
             fi
-            exit
+            #exit
         fi
 
         #text_delay ; echo "Checking package manager..."
@@ -620,7 +620,40 @@ Attempting to install package(s):
 '${missing[*]}'
 " | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info --timeout=3 $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Notification" --ok-label="" --cancel-label=""
-                x-terminal-emulator -e bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\";" # exec bash
+
+                if x-terminal-emulator -e bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\";"; then
+                    sleep .1
+                else
+                    # List of terminal emulators with their -e syntax
+                    terminals=(
+                    "xfce4-terminal -x"           # XFCE
+                    "konsole --execute"           # KDE
+                    "mate-terminal -x"            # MATE
+                    "kitty --execute"             # Kitty
+                    "gnome-terminal --"           # GNOME
+                    "lxterminal -e"               # LXDE
+                    "tilix -e"                    # Tilix (VTE-based)
+                    "alacritty --command"         # Alacritty
+                    "urxvt -e"                    # RXVT
+                    "terminator -e"               # Terminator
+                    "deepin-terminal -e"          # Deepin
+                    "wezterm start --"            # WezTerm
+                    "xterm -e"                    # XTerm
+                    )
+
+                    for term in "${terminals[@]}"; do
+                    cmd=($term)  # Split into command and args
+                    if command -v "${cmd[0]}" &>/dev/null; then
+                        "${cmd[@]}" bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\"" #exec
+                        break # Exit the loop after the first successful command
+                    fi
+                    done
+
+                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
+                    #exit 1
+                fi
+
+                 # exec bash
                 exit
             else
                 cat
@@ -871,25 +904,26 @@ $full_path" | center
                 else
                     # List of terminal emulators with their -e syntax
                     terminals=(
-                    "gnome-terminal --"           # GNOME
-                    "konsole --execute"           # KDE
                     "xfce4-terminal -x"           # XFCE
-                    "lxterminal -e"               # LXDE
-                    "tilix -e"                    # Tilix (VTE-based)
+                    "konsole --execute"           # KDE
                     "mate-terminal -x"            # MATE
                     "kitty --execute"             # Kitty
+                    "gnome-terminal --"           # GNOME
+                    "lxterminal -e"               # LXDE
+                    "tilix -e"                    # Tilix (VTE-based)
                     "alacritty --command"         # Alacritty
                     "urxvt -e"                    # RXVT
-                    "xterm -e"                    # XTerm
                     "terminator -e"               # Terminator
                     "deepin-terminal -e"          # Deepin
                     "wezterm start --"            # WezTerm
+                    "xterm -e"                    # XTerm
                     )
 
                     for term in "${terminals[@]}"; do
                     cmd=($term)  # Split into command and args
                     if command -v "${cmd[0]}" &>/dev/null; then
                         "${cmd[@]}" bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\"" #exec
+                        break # Exit the loop after the first successful command
                     fi
                     done
 
