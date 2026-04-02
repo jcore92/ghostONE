@@ -62,6 +62,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=550 --height=550"
     default_mainmenu_gui_dimensions="--width=450 --height=550"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
 
     if [ "$XDG_CURRENT_DESKTOP" == "XFCE" ]; then
@@ -344,6 +345,8 @@ mutagenesisx-shell () {
 
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
 
+GPL-2.0 license
+
 Presented By:
 https://jcorestudios.com/
 https://github.com/jcore92
@@ -373,6 +376,9 @@ https://github.com/jcore92" | center
     jcore92_banner
 
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
+" | center
+
+echo "GPL-2.0 license
 " | center
 
     echo "Infused with MutagenesisX, ghostAPT v2, and Command Center's DNA.
@@ -507,17 +513,27 @@ jcore92 - Lead Programmer" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ Neither Ubuntu nor Debian base found.
- ✓ Compatibility mode enabled." | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
+            text_delay ; echo " ✕ Ubuntu or Debian base NOT installed.
+
+INFO:
+***
+
+We will try to enable the distro-bridge compatibility layer. (allows the use of other package managers outside of apt).
+
+Distro-Bridge Support: Zypper, Pacman, DNF, YUM.
+
+***" | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
             else
                 cat | print_red
             fi
 
             if [ "$tui_flag" = "1" ]; then
-            divider
-            entertocontinue
+            echo " ✓ distro-bridge enabled."
+            #divider
+            #entertocontinue
             fi
+            xprob_messages+=(" ✓ distro-bridge enabled.")
             #exit
         fi
 
@@ -531,9 +547,11 @@ jcore92 - Lead Programmer" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ Unsupported package manager '$package_manager'." | if [ "$gui_flag" = "1" ]; then
+            text_delay ; echo " ✕ Unsupported package manager '$package_manager'.
+
+Program cannot continue, exiting." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
-                exit
+                #exit
             else
                 cat | print_red
             fi
@@ -565,12 +583,15 @@ jcore92 - Lead Programmer" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ wayland display server is installed.
+            text_delay ; echo " ✕ Wayland display server is installed.
 
 WARNING:
-*** Wayland is incomplete and broken by design. Consider a complete x11 solution instead. ***" | if [ "$gui_flag" = "1" ]; then
+***
+
+Wayland is incomplete and broken by design (not a true x11 drop-in replacement). For a more complete Linux experience consider a complete x11/xLibre solution instead.
+
+***" | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
-                xprob_messages+=(" ✓ $XDG_SESSION_TYPE is installed.")
             else
                 cat | print_red
             fi
@@ -580,6 +601,7 @@ WARNING:
             entertocontinue
             fi
 
+            xprob_messages+=(" ✕ $XDG_SESSION_TYPE is installed.")
             #exit
 
             else
@@ -603,12 +625,17 @@ WARNING:
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ systemd has roughly over 1.3 million lines of code and growing.
+            text_delay ; echo " ✕ SystemD is installed.
+
+SystemD has roughly over 1.3 million lines of code and growing each day!
 
 WARNING:
-*** Massive Attack Surface + Inefficient Code Compared To Other Init Systems ***" | if [ "$gui_flag" = "1" ]; then
+***
+
+Due to the size of this code base SystemD is considered a massive attack surface & inefficient code compared to other Linux init systems.
+
+***" | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
-                xprob_messages+=(" ✕ systemd is installed.")
             else
                 cat | print_red
             fi
@@ -618,13 +645,14 @@ WARNING:
             entertocontinue
             fi
 
+            xprob_messages+=(" ✕ SystemD is installed.")
             #exit
 
             else
 
-            xprob_messages+=(" ✓ systemd is NOT installed (Optimal Setup).")
+            xprob_messages+=(" ✓ SystemD is NOT installed.")
 
-            text_delay ; echo " ✓ systemd is NOT installed (Optimal Setup)." | if [ "$tui_flag" = "1" ]; then
+            text_delay ; echo " ✓ SystemD is NOT installed." | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
             fi
@@ -719,7 +747,7 @@ Attempting to install package(s):
                     fi
                     done
 
-                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
+                    echo "No terminal emulator found. Please install xterm, konsole, xfce4-terminal, or another commonly installed terminal emulator." | zenity --info --title="$app_name: $probe_name Notification" --text="$(cat)" $default_messagebox_gui_dimensions
                     #exit 1
                 fi
 
@@ -1022,7 +1050,7 @@ $full_path" | center
                     fi
                     done
 
-                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
+                    echo "No terminal emulator found. Please install xterm, konsole, xfce4-terminal, or another commonly installed terminal emulator." | zenity --info --title="$app_name: $probe_name Notification" --text="$(cat)" $default_messagebox_gui_dimensions
                     #exit 1
                 fi
 
