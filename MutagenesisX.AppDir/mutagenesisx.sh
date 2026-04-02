@@ -502,7 +502,7 @@ jcore92 - Lead Programmer" | center
 
             text_delay ; echo " ✕ Neither Ubuntu nor Debian base found.
  ✓ Compatibility mode enabled." | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
             else
                 cat | print_red
             fi
@@ -807,12 +807,12 @@ $pkgmngr_install ${missing[*]}" | if [ "$gui_flag" = "1" ]; then
             fi
             done
 
-            if [[ -f "$HOME/.MutagenesisX" || -f "$HOME/.mutagenesisx" ]]; then
+            if [[ -f "$HOME/.ghostONE" || -f "$HOME/.ghostone" ]]; then
                 # Build list of .sh files
-                for file in "$APPDIR/$dir/"*.MutagenesisX; do
+                for file in "$APPDIR/$dir/"*.ghostONE; do
                 if [[ -f "$file" ]]; then
                 script_files+=("$file")
-                local file_name=$(basename "$file" .MutagenesisX)
+                local file_name=$(basename "$file" .ghostONE)
                 script_file_names+=("$file_name")
                 script_display_names+=("$file_name")
                 script_map+=("$file_name:$file")
