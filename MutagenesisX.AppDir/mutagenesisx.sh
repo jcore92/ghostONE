@@ -74,8 +74,8 @@ mutagenesisx-shell () {
 
     if [ "$XDG_CURRENT_DESKTOP" == "COSMIC" ]; then
 
-    default_eula_gui_dimensions="--width=650 --height=650"
-    default_mainmenu_gui_dimensions="--width=550 --height=650"
+    default_eula_gui_dimensions="--width=550 --height=600"
+    default_mainmenu_gui_dimensions="--width=450 --height=600"
     default_loading_gui_dimensions="--width=300 --height=200"
 
     fi
@@ -432,11 +432,12 @@ jcore92 - Lead Programmer" | center
             text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions
             else
-                cat
+                cat | print_red
                 #entertocontinue
             fi
 
         if [ "$tui_flag" = "1" ]; then
+            divider
             entertocontinue
         fi
         exit
@@ -448,11 +449,12 @@ jcore92 - Lead Programmer" | center
             text_delay ; echo " ✕ WSL is not supported." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions
             else
-                cat
+                cat | print_red
                 #entertocontinue
             fi
 
         if [ "$tui_flag" = "1" ]; then
+            divider
             entertocontinue
         fi
         exit
@@ -468,17 +470,12 @@ jcore92 - Lead Programmer" | center
 
             xprob_messages+=(" ✓ $prettyname")
             xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
-            xprob_messages+=(" ✓ Display Server: $XDG_SESSION_TYPE")
 
             text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
             text_delay ; echo " ✓ Desktop Environment: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-            text_delay ; echo " ✓ Display Server: $XDG_SESSION_TYPE" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
@@ -486,17 +483,12 @@ jcore92 - Lead Programmer" | center
 
             xprob_messages+=(" ✓ $prettyname")
             xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
-            xprob_messages+=(" ✓ Display Server: $XDG_SESSION_TYPE")
 
             text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
             text_delay ; echo " ✓ Desktop Environment: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-            text_delay ; echo " ✓ Display Server: $XDG_SESSION_TYPE" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
 
@@ -508,7 +500,8 @@ jcore92 - Lead Programmer" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ Neither Ubuntu nor Debian base found." | if [ "$gui_flag" = "1" ]; then
+            text_delay ; echo " ✕ Neither Ubuntu nor Debian base found.
+ ✓ Compatibility mode enabled." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
             else
                 cat | print_red
@@ -553,6 +546,83 @@ jcore92 - Lead Programmer" | center
                 cat
             fi
         fi
+
+
+
+
+        if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+
+            if [ "$gui_flag" = "1" ]; then
+            echo "# generating results..." >&3
+            sleep 1
+            echo "# displaying report..." >&3
+            fi
+
+            text_delay ; echo " ✕ wayland display server is installed.
+
+WARNING:
+*** Wayland is incomplete and broken by design. Consider a complete x11 solution instead. ***" | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
+                xprob_messages+=(" ✓ $XDG_SESSION_TYPE is installed.")
+            else
+                cat | print_red
+            fi
+
+            if [ "$tui_flag" = "1" ]; then
+            divider
+            entertocontinue
+            fi
+
+            #exit
+
+            else
+
+            xprob_messages+=(" ✓ $XDG_SESSION_TYPE is installed.")
+
+            text_delay ; echo " ✓ $XDG_SESSION_TYPE is installed." | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+            fi
+
+
+
+
+
+        if [[ -d /run/systemd/system ]]; then
+
+            if [ "$gui_flag" = "1" ]; then
+            echo "# generating results..." >&3
+            sleep 1
+            echo "# displaying report..." >&3
+            fi
+
+            text_delay ; echo " ✕ systemd has roughly over 1.3 million lines of code and growing.
+
+WARNING:
+*** Massive Attack Surface + Inefficient Code Compared To Other Init Systems ***" | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
+                xprob_messages+=(" ✕ systemd is installed.")
+            else
+                cat | print_red
+            fi
+
+            if [ "$tui_flag" = "1" ]; then
+            divider
+            entertocontinue
+            fi
+
+            #exit
+
+            else
+
+            xprob_messages+=(" ✓ systemd is NOT installed (Optimal Setup).")
+
+            text_delay ; echo " ✓ systemd is NOT installed (Optimal Setup)." | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+            fi
+
+
 
         #text_delay ; echo "Checking installed packages..."
 
@@ -612,7 +682,7 @@ jcore92 - Lead Programmer" | center
 Attempting to install package(s):
 '${missing[*]}'
 " | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info --timeout=3 $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Notification" --ok-label="" --cancel-label=""
+                zenity --text-info --timeout=4 $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Notification" --ok-label="" --cancel-label=""
 
                 if x-terminal-emulator -e bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\";"; then
                     sleep .1
@@ -709,11 +779,22 @@ $pkgmngr_install ${missing[*]}" | if [ "$gui_flag" = "1" ]; then
 
             local dir="$1"
 
-            # Arrays to hold .sh files, names, and mapping
+            # Arrays to hold .$package_manager files, names, and mapping
             local script_files=()
             local script_file_names=()
             local script_display_names=()
             local script_map=()
+
+            # Build list of .$package_manager files
+            for file in "$APPDIR/$dir/"*.$package_manager; do
+            if [[ -f "$file" ]]; then
+            script_files+=("$file")
+            local file_name=$(basename "$file" .$package_manager)
+            script_file_names+=("$file_name")
+            script_display_names+=("$file_name")
+            script_map+=("$file_name:$file")
+            fi
+            done
 
             # Build list of .sh files
             for file in "$APPDIR/$dir/"*.sh; do
@@ -725,6 +806,19 @@ $pkgmngr_install ${missing[*]}" | if [ "$gui_flag" = "1" ]; then
             script_map+=("$file_name:$file")
             fi
             done
+
+            if [[ -f "$HOME/.MutagenesisX" || -f "$HOME/.mutagenesisx" ]]; then
+                # Build list of .sh files
+                for file in "$APPDIR/$dir/"*.MutagenesisX; do
+                if [[ -f "$file" ]]; then
+                script_files+=("$file")
+                local file_name=$(basename "$file" .MutagenesisX)
+                script_file_names+=("$file_name")
+                script_display_names+=("$file_name")
+                script_map+=("$file_name:$file")
+                fi
+                done
+            fi
 
             if [ "$tui_flag" = "1" ]; then
 
@@ -881,6 +975,7 @@ $full_path" | center
             #export -f entertocontinue
             #export -f text_delay
 
+            export package_manager
             export pkgmngr_install
             export pkgmngr_refresh
             export app_name
