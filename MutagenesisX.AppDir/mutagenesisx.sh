@@ -28,7 +28,7 @@ mutagenesisx-shell () {
 
     current_user="$whoami"
 
-    package_manager="$(for cmd in apt dnf yum pacman zypper; do
+    package_manager="$(for cmd in apt dnf apk pacman zypper; do
     command -v $cmd &>/dev/null && echo $cmd && break
     done)"
 
@@ -42,9 +42,9 @@ mutagenesisx-shell () {
     pkgmngr_refresh="sudo $package_manager makecache"
     fi
 
-    if [ "$package_manager" == "yum" ]; then
-    pkgmngr_install="sudo $package_manager install -y"
-    pkgmngr_refresh="sudo $package_manager check-update"
+    if [ "$package_manager" == "apk" ]; then
+    pkgmngr_install="sudo $package_manager add"
+    pkgmngr_refresh="sudo $package_manager update"
     fi
 
     if [ "$package_manager" == "pacman" ]; then
@@ -62,6 +62,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=550 --height=550"
     default_mainmenu_gui_dimensions="--width=450 --height=550"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
 
     if [ "$XDG_CURRENT_DESKTOP" == "XFCE" ]; then
@@ -69,6 +70,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=450 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -77,6 +79,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=550 --height=600"
     default_mainmenu_gui_dimensions="--width=450 --height=600"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -85,6 +88,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=500 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -93,6 +97,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=500 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -343,6 +348,7 @@ mutagenesisx-shell () {
     if [ "$gui_flag" = "1" ]; then
 
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
+GPL-2.0 license
 
 Presented By:
 https://jcorestudios.com/
@@ -372,7 +378,9 @@ https://github.com/jcore92" | center
 
     jcore92_banner
 
-    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
+    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage" | center
+
+    echo "GPL-2.0 license
 " | center
 
     echo "Infused with MutagenesisX, ghostAPT v2, and Command Center's DNA.
@@ -434,21 +442,20 @@ jcore92 - Lead Programmer" | center
 
         #text_delay ; echo "Checking environment..."
 
-        if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+        #if [ "$XDG_SESSION_TYPE" = "tty" ]; then
 
-            text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions
-            else
-                cat | print_red
-                #entertocontinue
-            fi
+            #text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
+                #zenity --text-info $default_mainmenu_gui_dimensions
+            #else
+                #cat | print_red
+            #fi
 
-        if [ "$tui_flag" = "1" ]; then
-            divider
-            entertocontinue
-        fi
-        exit
-        fi
+        #if [ "$tui_flag" = "1" ]; then
+            #divider
+            #entertocontinue
+        #fi
+        #exit
+        #fi
 
 
         if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$IS_WSL" ]; then
@@ -467,73 +474,15 @@ jcore92 - Lead Programmer" | center
         exit
         fi
 
-
-
-        # Get system's pretty name to display
-        prettyname="$(cat /etc/os-release | grep "PRETTY_NAME" | awk -F '"' '{print $2}')"
-
-        # Check the /etc/os-release file for any trace of Ubuntu or Debian: ubuntu debian
-        if grep -qi "ubuntu" /etc/os-release; then
-
-            xprob_messages+=(" ✓ $prettyname")
-            xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
-
-            text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-            text_delay ; echo " ✓ Desktop Environment: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-        elif grep -qi "debian" /etc/os-release; then
-
-            xprob_messages+=(" ✓ $prettyname")
-            xprob_messages+=(" ✓ Desktop Environment: $XDG_CURRENT_DESKTOP")
-
-            text_delay ; echo " ✓ $prettyname" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-            text_delay ; echo " ✓ Desktop Environment: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
-
-        else
-
-            if [ "$gui_flag" = "1" ]; then
-            echo "# generating results..." >&3
-            sleep 1
-            echo "# displaying report..." >&3
-            fi
-
-            text_delay ; echo " ✕ Neither Ubuntu nor Debian base found.
- ✓ Compatibility mode enabled." | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
-            else
-                cat | print_red
-            fi
-
-            if [ "$tui_flag" = "1" ]; then
-            divider
-            entertocontinue
-            fi
-            #exit
-        fi
-
         #text_delay ; echo "Checking package manager..."
 
-        if [ "$package_manager" != "apt" ] && [ "$package_manager" != "zypper" ] && [ "$package_manager" != "dnf" ] && [ "$package_manager" != "pacman" ] && [ "$package_manager" != "yum" ]; then
+        if [ "$package_manager" != "apt" ] && [ "$package_manager" != "zypper" ] && [ "$package_manager" != "dnf" ] && [ "$package_manager" != "pacman" ] && [ "$package_manager" != "apk" ]; then
 
-            if [ "$gui_flag" = "1" ]; then
-            echo "# generating results..." >&3
-            sleep 1
-            echo "# displaying report..." >&3
-            fi
+            text_delay ; echo " ✕ Unsupported package manager '$package_manager'.
 
-            text_delay ; echo " ✕ Unsupported package manager '$package_manager'." | if [ "$gui_flag" = "1" ]; then
+Program cannot continue, exiting." | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label=""
-                exit
+                #exit
             else
                 cat | print_red
             fi
@@ -545,19 +494,65 @@ jcore92 - Lead Programmer" | center
 
             exit
 
-        else
-
-            xprob_messages+=(" ✓ $package_manager is installed")
-
-            text_delay ; echo " ✓ $package_manager is installed" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
         fi
 
 
 
+        # Get system's pretty name to display
+        prettyname="$(cat /etc/os-release | grep "PRETTY_NAME" | awk -F '"' '{print $2}')"
 
-        if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+        # Check the /etc/os-release file for any trace of Ubuntu or Debian: ubuntu debian
+        if grep -qi "ubuntu" /etc/os-release; then
+
+            xprob_messages+=("$prettyname")
+            xprob_messages+=(" ✓ package manager: $package_manager")
+            xprob_messages+=(" ✓ distro-bridge: disabled")
+            xprob_messages+=(" ✓ desktop env: $XDG_CURRENT_DESKTOP")
+
+            text_delay ; echo "$prettyname" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            text_delay ; echo " ✓ package manager: $package_manager" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            if [ "$tui_flag" = "1" ]; then
+            echo " ✓ distro-bridge: disabled"
+            #divider
+            #entertocontinue
+            fi
+
+            text_delay ; echo " ✓ desktop env: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+        elif grep -qi "debian" /etc/os-release; then
+
+            xprob_messages+=("$prettyname")
+            xprob_messages+=(" ✓ package manager: $package_manager")
+            xprob_messages+=(" ✓ distro-bridge: disabled")
+            xprob_messages+=(" ✓ desktop env: $XDG_CURRENT_DESKTOP")
+
+            text_delay ; echo "$prettyname" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            text_delay ; echo " ✓ package manager: $package_manager" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            if [ "$tui_flag" = "1" ]; then
+            echo " ✓ distro-bridge: disabled"
+            #divider
+            #entertocontinue
+            fi
+
+            text_delay ; echo " ✓ desktop env: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+        else
 
             if [ "$gui_flag" = "1" ]; then
             echo "# generating results..." >&3
@@ -565,12 +560,63 @@ jcore92 - Lead Programmer" | center
             echo "# displaying report..." >&3
             fi
 
-            text_delay ; echo " ✕ wayland display server is installed.
+            xprob_messages+=("$prettyname")
+            xprob_messages+=(" ✓ package manager: $package_manager")
+            xprob_messages+=(" ✓ distro-bridge: enabled")
+            xprob_messages+=(" ✓ desktop env: $XDG_CURRENT_DESKTOP")
+
+            text_delay ; echo "$prettyname" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            text_delay ; echo " ✕ Ubuntu or Debian base NOT installed
+
+INFO:
+***
+
+We will try to enable the distro-bridge compatibility layer. (allows the use of other package managers outside of apt).
+
+distro-bridge support: zypper, pacman, dnf, apk.
+
+***" | if [ "$gui_flag" = "1" ]; then
+                #zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=10
+                zenity --progress --pulsate --timeout=2 --text="Enabling distro-bridge for non-debian distros..." --title="$app_name: distro-bridge" $default_loading_gui_dimensions --no-cancel &
+            else
+                cat | print_red
+            fi
+
+            text_delay ; echo " ✓ package manager: $package_manager" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            if [ "$tui_flag" = "1" ]; then
+            echo " ✓ distro-bridge: enabled"
+            #divider
+            #entertocontinue
+            fi
+
+            text_delay ; echo " ✓ desktop env: $XDG_CURRENT_DESKTOP" | if [ "$tui_flag" = "1" ]; then
+                cat
+            fi
+
+            sleep .5
+            #exit
+        fi
+
+
+
+
+        if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+
+            text_delay ; echo " ✕ display server: wayland
 
 WARNING:
-*** Wayland is incomplete and broken by design. Consider a complete x11 solution instead. ***" | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
-                xprob_messages+=(" ✓ $XDG_SESSION_TYPE is installed.")
+***
+
+wayland is incomplete and broken by design (not a true x11 drop-in replacement). For a more complete Linux experience consider a complete x11/xLibre solution instead.
+
+***" | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=10
             else
                 cat | print_red
             fi
@@ -580,13 +626,14 @@ WARNING:
             entertocontinue
             fi
 
+            xprob_messages+=(" ✕ display server: wayland")
             #exit
 
             else
 
-            xprob_messages+=(" ✓ $XDG_SESSION_TYPE is installed.")
+            xprob_messages+=(" ✓ display server: $XDG_SESSION_TYPE")
 
-            text_delay ; echo " ✓ $XDG_SESSION_TYPE is installed." | if [ "$tui_flag" = "1" ]; then
+            text_delay ; echo " ✓ display server: $XDG_SESSION_TYPE" | if [ "$tui_flag" = "1" ]; then
                 cat
             fi
             fi
@@ -597,18 +644,17 @@ WARNING:
 
         if [[ -d /run/systemd/system ]]; then
 
-            if [ "$gui_flag" = "1" ]; then
-            echo "# generating results..." >&3
-            sleep 1
-            echo "# displaying report..." >&3
-            fi
+            text_delay ; echo " ✕ systemd detected
 
-            text_delay ; echo " ✕ systemd has roughly over 1.3 million lines of code and growing.
+systemd has roughly over 1.3 million lines of code and growing each day!
 
 WARNING:
-*** Massive Attack Surface + Inefficient Code Compared To Other Init Systems ***" | if [ "$gui_flag" = "1" ]; then
-                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=7
-                xprob_messages+=(" ✕ systemd is installed.")
+***
+
+Due to the size of this code base systemd is considered a massive attack surface & inefficient code compared to other Linux init systems. To improve security, we recommend switching to a distro without systemd.
+
+***" | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=10
             else
                 cat | print_red
             fi
@@ -618,20 +664,22 @@ WARNING:
             entertocontinue
             fi
 
+            xprob_messages+=(" ✕ systemd: detected")
             #exit
 
-            else
+            #else
 
-            xprob_messages+=(" ✓ systemd is NOT installed (Optimal Setup).")
+            #xprob_messages+=(" ✓ systemd: not detected")
 
-            text_delay ; echo " ✓ systemd is NOT installed (Optimal Setup)." | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
+            #text_delay ; echo " ✓ systemd: not detected" | if [ "$tui_flag" = "1" ]; then
+                #cat
+            #fi
             fi
 
 
 
         #text_delay ; echo "Checking installed packages..."
+        # Optimal for Alpine Linux, but mainstream Linux should already have these installed:
 
         tool_to_pkg_name() {
         case "$1" in
@@ -639,6 +687,9 @@ WARNING:
         #"7z")  echo "p7zip-full" ;;
         "dig")  echo "dnsutils" ;;
         "sha256sum")  echo "coreutils" ;;
+        "xdg-open")  echo "xdg-utils" ;;
+        "chsh")  echo "shadow" ;;
+        "tput")  echo "ncurses" ;;
         *)     echo "$1" ;;
         esac
         }
@@ -648,7 +699,7 @@ WARNING:
         check_programs() {
         declare -g missing=()
         #local programs=("jq" "unzip" "7z" "dig" "nano" "git" "flatpak" "zenity")  # Add more here
-        local programs=("jq" "nano" "git" "flatpak" "zenity")  # Add more here
+        local programs=("sudo" "bash" "flatpak" "zenity" "nano" "git" "jq" "tput" "chsh"  "xdg-open")  # Add more here
 
         for prog in "${programs[@]}"; do
         if ! command -v "$prog" &>/dev/null; then
@@ -691,8 +742,8 @@ Attempting to install package(s):
 " | if [ "$gui_flag" = "1" ]; then
                 zenity --text-info --timeout=4 $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Notification" --ok-label="" --cancel-label=""
 
-                if x-terminal-emulator -e bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\";"; then
-                    sleep .1
+                if [ "$package_manager" == "apt" ]; then
+                    x-terminal-emulator -e bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\";"
                 else
                     # List of terminal emulators with their -e syntax
                     terminals=(
@@ -711,16 +762,22 @@ Attempting to install package(s):
                     "xterm -e"                    # XTerm
                     )
 
+                    terminal_launched=false
+
                     for term in "${terminals[@]}"; do
                     cmd=($term)  # Split into command and args
                     if command -v "${cmd[0]}" &>/dev/null; then
-                        "${cmd[@]}" bash -c "printf \" 🔐 \" ; $pkgmngr_refresh ; $pkgmngr_install ${missing[*]}; echo \"\"; read -p \"Press enter to continue\"" #exec
+                        "${cmd[@]}" bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\"" #exec
+                        terminal_launched=true
                         break # Exit the loop after the first successful command
                     fi
                     done
 
-                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
-                    #exit 1
+                    # Only show error if *no* terminal could be launched
+                    if [[ "$terminal_launched" == false ]]; then
+                        echo "No terminal emulator found. Please install xfce4-terminal, kitty, konsole, gnome-terminal, xterm, or another commonly installed terminal emulator or use this program in TUI mode." | \
+                        zenity --info --title="$app_name: Notification" --text="$(cat)" $default_messagebox_gui_dimensions
+                    fi
                 fi
 
                  # exec bash
@@ -994,8 +1051,8 @@ $full_path" | center
             #mutagen_banner
             if [ "$gui_flag" = "1" ]; then
 
-                if x-terminal-emulator -e bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\";"; then
-                    sleep .1
+                if [ "$package_manager" == "apt" ]; then
+                    x-terminal-emulator -e bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\";"
                 else
                     # List of terminal emulators with their -e syntax
                     terminals=(
@@ -1014,16 +1071,22 @@ $full_path" | center
                     "xterm -e"                    # XTerm
                     )
 
+                    terminal_launched=false
+
                     for term in "${terminals[@]}"; do
                     cmd=($term)  # Split into command and args
                     if command -v "${cmd[0]}" &>/dev/null; then
                         "${cmd[@]}" bash -c "'$full_path'; echo \"\"; read -p \"Press enter to continue\"" #exec
+                        terminal_launched=true
                         break # Exit the loop after the first successful command
                     fi
                     done
 
-                    echo "No terminal emulator found. Please install xterm, gnome-terminal, or similar."
-                    #exit 1
+                    # Only show error if *no* terminal could be launched
+                    if [[ "$terminal_launched" == false ]]; then
+                        echo "No terminal emulator found. Please install xfce4-terminal, kitty, konsole, gnome-terminal, xterm, or another commonly installed terminal emulator or use this program in TUI mode." | \
+                        zenity --info --title="$app_name: Notification" --text="$(cat)" $default_messagebox_gui_dimensions
+                    fi
                 fi
 
             else
@@ -1061,7 +1124,7 @@ $full_path" | center
             done
 
             # Add "Back" option
-            menu+=("About $app_name" "Exit $app_name")
+            menu+=("View $probe_name Report" "About $app_name" "Exit $app_name")
 
             # If no directories found
             if [ ${#menu[@]} -eq 0 ]; then
@@ -1094,6 +1157,19 @@ Select a menu option:" | center
 
 
             # Process selection
+            if [ "$selected" == "View $probe_name Report" ]; then
+                if [ "$gui_flag" = "1" ]; then
+                printf '%s\n' "${xprob_messages[@]}" | zenity --text-info --title="$app_name: $probe_name Report" $default_mainmenu_gui_dimensions
+                else
+                divider
+                echo ""
+                printf '%s\n' "${xprob_messages[@]}"
+                divider
+                entertocontinue
+                fi
+            continue
+            fi
+
             if [ "$selected" == "About $app_name" ]; then
             credits
             continue
@@ -1155,7 +1231,7 @@ if [ "$gui_flag" = "1" ]; then
     xprobe
     echo "100" >&3
     exec 3>&-  # Close fd
-    printf '%s\n' "${xprob_messages[@]}" | zenity --text-info --title="$app_name: $probe_name Report" --timeout=5 $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label=""
+    printf '%s\n' "${xprob_messages[@]}" | zenity --text-info --title="$app_name: $probe_name Report" --timeout=7 $default_mainmenu_gui_dimensions #--ok-label="" --cancel-label=""
     #exit
 else
     xprobe
