@@ -15,7 +15,7 @@ mutagenesisx-shell () {
     app_ver_minor="0"
     app_ver_build="0"
     app_ver_stage="beta"
-    probe_name="System Compatibility"
+    probe_name="System"
 
     gui_flag="0"
     tui_flag="0"
@@ -639,8 +639,6 @@ wayland is incomplete and broken by design (not a true x11 drop-in replacement).
             text_delay ; echo " ✕ systemd detected
 
 systemd has roughly over 1.3 million lines of code and growing each day!
-
-SystemD has roughly over 1.3 million lines of code and growing each day!
 
 WARNING:
 ***
