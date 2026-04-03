@@ -743,6 +743,7 @@ Attempting to install package(s):
                     fi
                     done
 
+                    echo "No terminal emulator found. Please install xterm, konsole, xfce4-terminal, or another commonly installed terminal emulator." | zenity --info --title="$app_name: $probe_name Notification" --text="$(cat)" $default_messagebox_gui_dimensions
                     #exit 1
                 fi
 
@@ -1048,6 +1049,7 @@ $full_path" | center
                     fi
                     done
 
+                    echo "No terminal emulator found. Please install xterm, konsole, xfce4-terminal, or another commonly installed terminal emulator." | zenity --info --title="$app_name: $probe_name Notification" --text="$(cat)" $default_messagebox_gui_dimensions
                     #exit 1
                 fi
 
