@@ -337,7 +337,6 @@ mutagenesisx-shell () {
     if [ "$gui_flag" = "1" ]; then
 
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
-
 GPL-2.0 license
 
 Presented By:
@@ -368,10 +367,9 @@ https://github.com/jcore92" | center
 
     jcore92_banner
 
-    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
-" | center
+    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage" | center
 
-echo "GPL-2.0 license
+    echo "GPL-2.0 license
 " | center
 
     echo "Infused with MutagenesisX, ghostAPT v2, and Command Center's DNA.
