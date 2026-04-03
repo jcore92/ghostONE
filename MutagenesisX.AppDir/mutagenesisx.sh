@@ -337,6 +337,7 @@ mutagenesisx-shell () {
     if [ "$gui_flag" = "1" ]; then
 
     echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
+GPL-2.0 license
 
 GPL-2.0 license
 
@@ -368,7 +369,9 @@ https://github.com/jcore92" | center
 
     jcore92_banner
 
-    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage
+    echo "$app_name $app_ver_major.$app_ver_minor.$app_ver_build $app_ver_stage" | center
+
+    echo "GPL-2.0 license
 " | center
 
 echo "GPL-2.0 license
