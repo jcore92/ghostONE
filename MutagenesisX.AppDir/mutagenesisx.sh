@@ -440,22 +440,22 @@ jcore92 - Lead Programmer" | center
         # Initialize array
         xprob_messages=()
 
-        #text_delay ; echo "Checking environment..."
+        text_delay ; echo "Checking environment..."
 
-        #if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+        if [ "$XDG_SESSION_TYPE" = "tty" ]; then
 
-            #text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
-                #zenity --text-info $default_mainmenu_gui_dimensions
-            #else
-                #cat | print_red
-            #fi
+            text_delay ; echo " ✕ TTY is not supported. Please use a Desktop Environment to open $app_name." | if [ "$gui_flag" = "1" ]; then
+                zenity --text-info $default_mainmenu_gui_dimensions
+            else
+                cat | print_red
+            fi
 
-        #if [ "$tui_flag" = "1" ]; then
-            #divider
-            #entertocontinue
-        #fi
-        #exit
-        #fi
+        if [ "$tui_flag" = "1" ]; then
+            divider
+            entertocontinue
+        fi
+        exit
+        fi
 
 
         if [ -n "$WSL_DISTRO_NAME" ] || [ -n "$IS_WSL" ]; then
@@ -699,7 +699,7 @@ Due to the size of this code base systemd is considered a massive attack surface
         check_programs() {
         declare -g missing=()
         #local programs=("jq" "unzip" "7z" "dig" "nano" "git" "flatpak" "zenity")  # Add more here
-        local programs=("sudo" "bash" "flatpak" "zenity" "nano" "git" "jq" "tput" "chsh"  "xdg-open")  # Add more here
+        local programs=("flatpak" "zenity" "nano" "git" "jq" "tput" "chsh" "xdg-open")  # Add more here
 
         for prog in "${programs[@]}"; do
         if ! command -v "$prog" &>/dev/null; then
