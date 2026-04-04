@@ -28,7 +28,7 @@ mutagenesisx-shell () {
 
     current_user="$whoami"
 
-    package_manager="$(for cmd in apt dnf yum pacman zypper; do
+    package_manager="$(for cmd in apt dnf apk pacman zypper; do
     command -v $cmd &>/dev/null && echo $cmd && break
     done)"
 
@@ -42,9 +42,9 @@ mutagenesisx-shell () {
     pkgmngr_refresh="sudo $package_manager makecache"
     fi
 
-    if [ "$package_manager" == "yum" ]; then
-    pkgmngr_install="sudo $package_manager install -y"
-    pkgmngr_refresh="sudo $package_manager check-update"
+    if [ "$package_manager" == "apk" ]; then
+    pkgmngr_install="sudo $package_manager add"
+    pkgmngr_refresh="sudo $package_manager update"
     fi
 
     if [ "$package_manager" == "pacman" ]; then
@@ -70,6 +70,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=450 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -78,6 +79,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=550 --height=600"
     default_mainmenu_gui_dimensions="--width=450 --height=600"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -86,6 +88,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=500 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -94,6 +97,7 @@ mutagenesisx-shell () {
     default_eula_gui_dimensions="--width=500 --height=500"
     default_mainmenu_gui_dimensions="--width=400 --height=500"
     default_loading_gui_dimensions="--width=300 --height=200"
+    default_messagebox_gui_dimensions="--width=350"
 
     fi
 
@@ -429,7 +433,7 @@ jcore92 - Lead Programmer" | center
         # Initialize array
         xprob_messages=()
 
-        #text_delay ; echo "Checking environment..."
+        text_delay ; echo "Checking environment..."
 
         if [ "$XDG_SESSION_TYPE" = "tty" ]; then
 
@@ -437,7 +441,6 @@ jcore92 - Lead Programmer" | center
                 zenity --text-info $default_mainmenu_gui_dimensions
             else
                 cat | print_red
-                #entertocontinue
             fi
 
         if [ "$tui_flag" = "1" ]; then
@@ -466,7 +469,7 @@ jcore92 - Lead Programmer" | center
 
         #text_delay ; echo "Checking package manager..."
 
-        if [ "$package_manager" != "apt" ] && [ "$package_manager" != "zypper" ] && [ "$package_manager" != "dnf" ] && [ "$package_manager" != "pacman" ] && [ "$package_manager" != "yum" ]; then
+        if [ "$package_manager" != "apt" ] && [ "$package_manager" != "zypper" ] && [ "$package_manager" != "dnf" ] && [ "$package_manager" != "pacman" ] && [ "$package_manager" != "apk" ]; then
 
             text_delay ; echo " ✕ Unsupported package manager '$package_manager'.
 
@@ -566,7 +569,7 @@ INFO:
 
 We will try to enable the distro-bridge compatibility layer. (allows the use of other package managers outside of apt).
 
-Distro-Bridge Support: Zypper, Pacman, DNF, YUM.
+distro-bridge support: zypper, pacman, dnf, apk.
 
 ***" | if [ "$gui_flag" = "1" ]; then
                 #zenity --text-info $default_mainmenu_gui_dimensions --title="$app_name: $probe_name Report" --cancel-label="" --timeout=10
@@ -657,18 +660,19 @@ Due to the size of this code base systemd is considered a massive attack surface
             xprob_messages+=(" ✕ systemd: detected")
             #exit
 
-            else
+            #else
 
-            xprob_messages+=(" ✓ systemd: not detected")
+            #xprob_messages+=(" ✓ systemd: not detected")
 
-            text_delay ; echo " ✓ systemd: not detected" | if [ "$tui_flag" = "1" ]; then
-                cat
-            fi
+            #text_delay ; echo " ✓ systemd: not detected" | if [ "$tui_flag" = "1" ]; then
+                #cat
+            #fi
             fi
 
 
 
         #text_delay ; echo "Checking installed packages..."
+        # Optimal for Alpine Linux, but mainstream Linux should already have these installed:
 
         tool_to_pkg_name() {
         case "$1" in
@@ -676,6 +680,9 @@ Due to the size of this code base systemd is considered a massive attack surface
         #"7z")  echo "p7zip-full" ;;
         "dig")  echo "dnsutils" ;;
         "sha256sum")  echo "coreutils" ;;
+        "xdg-open")  echo "xdg-utils" ;;
+        "chsh")  echo "shadow" ;;
+        "tput")  echo "ncurses" ;;
         *)     echo "$1" ;;
         esac
         }
@@ -685,7 +692,7 @@ Due to the size of this code base systemd is considered a massive attack surface
         check_programs() {
         declare -g missing=()
         #local programs=("jq" "unzip" "7z" "dig" "nano" "git" "flatpak" "zenity")  # Add more here
-        local programs=("jq" "nano" "git" "flatpak" "zenity")  # Add more here
+        local programs=("flatpak" "zenity" "nano" "git" "jq" "tput" "chsh" "xdg-open")  # Add more here
 
         for prog in "${programs[@]}"; do
         if ! command -v "$prog" &>/dev/null; then
